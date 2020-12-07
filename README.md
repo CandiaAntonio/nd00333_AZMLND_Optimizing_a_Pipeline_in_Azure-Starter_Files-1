@@ -75,7 +75,7 @@ The **AutoML** was able to find the best predictor because it tries many differe
 ## Future work
 **What are some areas of improvement for future experiments? Why might these improvements help the model?**
 
-
+We could remove the **early stopping** policy to see if we can improve the accuracy using the **HyperDrive** pipeline. We could also increase the maximum number of iterations to see if it helps to increase the performance of the model. As for the **AutoML** pipeline, we could increase the number of **cross validations** to a typical value that is between 5 and 10 and see if it helps to improve the performance, considering that in this experiment we have set it to 2 to speed up the training process.
 
 ## Proof of cluster clean up
 **If you did not delete your compute cluster in the code, please complete this section. Otherwise, delete this section.**
@@ -83,5 +83,5 @@ The **AutoML** was able to find the best predictor because it tries many differe
 
 At the end of the pipeline the computer cluster is deleted.
 
-![](Images/cpu_cluster_delete.PNG]
+![](Images/cpu_cluster_delete.PNG)
 
