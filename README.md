@@ -33,7 +33,7 @@ The Scikit-learn Pipeline implemented to find the best predictor for the custome
 
 Below is the best predictor found after completing the training phase described above:
 
-![](HyperDrive_BestRun.PNG)
+![](Images/HyperDrive_BestRun.PNG)
 
 
 **What are the benefits of the parameter sampler you chose?**
