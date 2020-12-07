@@ -62,7 +62,7 @@ The final verdict of the **AutoML** tool is indicated below, and it shows that t
 
 Further, the final result also shows the importance of the features to make the prediction:
 
-![](AutoML_Best_Model_Global_Importance.PNG)
+![](Images/AutoML_Best_Model_Global_Importance.PNG)
 
 ## Pipeline comparison
 **Compare the two models and their performance. What are the differences in accuracy? In architecture? If there was a difference, why do you think there was one?**
