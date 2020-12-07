@@ -101,7 +101,7 @@ The **AutoML** model has been configured using the parameters indicated below:
 * **Timeout 30 seconds**: This timeout is critical to avoid running out of time within the free session we can use in the **AzureML** environment provided in the course, and make sure to complete the training process in that time window.
 * **Classification Task**: Because we want to solve a Classification problem
 * **Accuracy as a Primary Metric**: Because we identified the Accuracy as the metric to identify the best predictor and we want to compare the performance obtained using the **HyperDrive**.
-* **2 Cross Validations**: Number of cross validations to perform
+* **2 Cross Validations**: Number of cross validations to perform. For this experiment, I've set it to 2 to validate the model with a 2-fold cross validation when user validation data is not specified.
 * **'y' as the Label Column Name**: To say that 'y' is the column that we want to predict the value of
 * **Training Dataset**: This is the dataset to use during the training process
 
