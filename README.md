@@ -82,4 +82,5 @@ The **AutoML** was able to find the best predictor because it tries many differe
 **Image of cluster marked for deletion**
 
 At the end of the pipeline the computer cluster is deleted.
+
 ![](Images/cpu_cluster_delete.PNG]
