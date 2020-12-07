@@ -21,17 +21,55 @@ The best performing model in these experiments was the **VotingEnsemble** found 
 ## Scikit-learn Pipeline
 **Explain the pipeline architecture, including data, hyperparameter tuning, and classification algorithm.**
 
-The Scikit-learn Pipeline implemented to find the best predictor for the customers elibigle to take a loan goes through the steps below:
-* Get the dataset from the **CSV file** available [here](https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv).
-* Clean data in the dataset and apply the **One Hot Encode** to transform data into numeric format so that they can be used in an algorithm.
-* Split **train** and **test** data in two dataset following the classic rule 80:20 (80% for the training and 20% for the tests).
-* Use the train dataset to feed the **LogisticRegression** algorithm (taking advantage of the Scikit-Learn library).
-* Apply two hyperparameters to the **LogisticRegression**, that are:
-  * **--C**: Inverse of the regularization strength. Smaller values cause stronger regularization [0.05, 1]
-  * **--max_iter**: Maximum number of iterations to converge [20; 40; 60; 80; 100; 1000]
-* Take advantage of **Hyperdrive** to automatically tune the hyperparmeters within the admitted ranges passed in inputs to the **LogisticRegression** to find the best predictor based on the **Accuracy** as a primary metric that we try to **maximize**.
+The **Scikit-learn Pipeline** has been implemented by taking advantage of the **Jupyter Notebook** and the **Python SDK library**.
 
-Below is the best predictor found after completing the training phase described above, which was able to reach an accuracy of **0.90952** in **100 iterations** and with an inverse of the regularization strength of **0.56462**.
+The first thing the pipeline does is to get a reference to the **Workspace**. Using the **Workspace** we can create a **Compute Cluster** programmatically with the attributes below that is used to run the **HiperDrive** configuration:
+
+* vm_size='STANDARD_D2_V2'
+* max_nodes=4
+
+Data about bank marketing is imported using a ```TabularDatasetFactory``` a **CSV file** available [here](https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv). The dataset contains the following features: *age, job, marital, education, default, housing, loan, contact, month, day_of_week, duration, campaign, pdays, previous, poutcome, emp.var.rate, cons.price.idx,cons.conf.idx, euribor3m, nr.employed, y (this last parameter contains the result of the prediction with a yes/no based on if the customer is considered eligible or not for a loan)*.
+
+The training phase of the pipeline takes advantage of the **SKLearn Estimator** that uses the **train.py** script which uses a **LogisticRegression**, that is an algorithm tipically used in binary classification problems like the one we are studying in this experiment. 
+
+```
+est = SKLearn(source_directory=script_folder, compute_target=cpu_cluster, entry_script="train.py")
+```
+
+In particular, the **train.py** script does what follows:
+
+* **Clean data** in the dataset and apply the **One Hot Encode** to transform data into numeric format so that they can be used in an algorithm.
+ * Split **train** and **test** data in two dataset following the classic rule 80:20 (80% for the training and 20% for the tests). This is a critical step because the dataset used to train the model shouldn't be used to test the model, or the risk is to think that the model has good performance while isntead it just work well on that particular data used to train it.
+ * Use the train dataset to feed the **LogisticRegression** algorithm (taking advantage of the Scikit-Learn library).
+ * Apply two hyperparameters to the **LogisticRegression**, that are:
+   * **--C**: Inverse of the regularization strength. Smaller values cause stronger regularization
+   * **--max_iter**: Maximum number of iterations to converge
+
+The two hyperparameters passed to the **LogisticRegressions** (see above) can be tweaked to perform more trainings and compare the results to find the best combination to calculate the best predictor. This is a time consuming process, and it's where the **HyperDrive** comes to rescue. In fact, we could end up having to test many and many different combinations of the hyperparameters manually. while the **HyperDrive** helps us to automate this process, and that's what I did. **Hyperdrive**  automatically tune the hyperparmeters within the admitted ranges passed in inputs to the **LogisticRegression** to find the best predictor based on the **Accuracy** as a primary metric that we try to **maximize**.
+
+First thing first, I had to choose a **sampler** to select the values of the hypermarameters to test. In this case, I've opted for a **RandomParameterSampling** which picks up values randomly in the set provided as an inputm. The benefit is that it doesn't use **all** the values within the ranges, and complete the job pretty quickly:
+
+```
+ps = RandomParameterSampling({
+    "--C": uniform(0.05, 1),
+    "--max_iter": choice(20, 40, 60, 80, 100, 1000)
+    }
+)
+```
+
+* **C**: Inverse of the regularization strength. Smaller values cause stronger regularization. Considering that it has to be greater than 0, the uniform range between between 0.05 and 1 has been selected to verify how the model improves with lower values of C.
+* **max_iter**: Maximum number of iterations to converge. This parameter has been set to limit the time of the experiment, and see if makeing it longer helps to improve the performance.
+
+The **HyperDrive** has been configured to run as follows:
+
+```
+hyperdrive_config = HyperDriveConfig(estimator=est, policy=policy, hyperparameter_sampling=ps, 
+    primary_metric_name='Accuracy', primary_metric_goal=PrimaryMetricGoal.MAXIMIZE, max_total_runs=10, max_concurrent_runs=2)
+```
+
+As shown above, the **HyperDrive** uses the **SKLearn estimator**, a termination policy to avoid running for too long (below you can read the advantage of adopting an **early stopping policy**), a **parameter sampler** (I opted for a **RandomParameterSampling** - see above), a **primary metric** set to **Accuracy** because number of correct predictions on total predictions can be a good index to assess the performance of the model. The goal is to **maximize** the primary metric, because the higher the accuracy, the better. finally, I've set the **max concurrent nodes** to 2, to avoid exceeding the capabilities of the **compute cluster**, and the **max total runs** to 10 to avoid exceeding the time constraints.
+
+The **HyperDrive** performed 10 trainings with different combinations of the hyperparameters picked up randomly in the hyperparameter search space. The best predictor found after completing the training phase described above was able to reach an accuracy of **0.90952** in **100 iterations** and with an inverse of the regularization strength of **0.56462**.
 
 ![](Images/HyperDrive_BestRun.PNG)
 
