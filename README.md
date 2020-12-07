@@ -67,10 +67,15 @@ Further, the final result also shows the importance of the features to make the 
 ## Pipeline comparison
 **Compare the two models and their performance. What are the differences in accuracy? In architecture? If there was a difference, why do you think there was one?**
 
-The comparison between the best model found using the **HyperDrive** and the **AutoML** showed that the **AutoML** was able to find the best model in terms of **Accuracy** with a score of **0.91654** using a **VotingEnsemble** algorithm to solve this classification problem.
+The comparison between the best model found using the **HyperDrive** and the **AutoML** showed that the **AutoML** was able to find the best model in terms of **Accuracy** with a score of **0.91654** using a **VotingEnsemble** algorithm to solve this classification problem versus a **0.90952** obtained using the **LogisticRegression** using the **HyperDrive** tool.
+
+The **AutoML** was able to find the best predictor because it tries many different algorithms instead of using just one algorithm and tune the hyperparameters. However, it's important to note that there's not a big difference between the best accuracy obtained using **Azure Hyperdrive** and **AutoML**. Despite this, though, the **AutoML** was way more easy to configure and it took almost no effort to put up the environment and test many and many different algorithms in a short period of time. 
+
 
 ## Future work
 **What are some areas of improvement for future experiments? Why might these improvements help the model?**
+
+
 
 ## Proof of cluster clean up
 **If you did not delete your compute cluster in the code, please complete this section. Otherwise, delete this section.**
