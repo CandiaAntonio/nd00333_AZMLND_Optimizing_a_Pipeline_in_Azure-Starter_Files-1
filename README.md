@@ -80,3 +80,6 @@ The **AutoML** was able to find the best predictor because it tries many differe
 ## Proof of cluster clean up
 **If you did not delete your compute cluster in the code, please complete this section. Otherwise, delete this section.**
 **Image of cluster marked for deletion**
+
+At the end of the pipeline the computer cluster is deleted.
+![](cpu_cluster_delete.PNG]
