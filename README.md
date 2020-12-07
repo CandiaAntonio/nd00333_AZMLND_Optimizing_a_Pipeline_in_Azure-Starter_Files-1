@@ -56,12 +56,18 @@ The **AutoML** model has been configured using the parameters indicated below:
 * **'y' as the Label Column Name**: To say that 'y' is the column that we want to predict the value of
 * **Training Dataset**: This is the dataset to use during the training process
 
-The final verdict of the **AutoML** tool is indicated below:
+The final verdict of the **AutoML** tool is indicated below, and it shows that the best performing model is a **VotingEnsemble** that reached an **Accuracy** of **0.91654**:
 
+![](Images/AutoML_Best_Model.PNG)
 
+Further, the final result also shows the importance of the features to make the prediction:
+
+![](AutoML_Best_Model_Global_Importance.PNG)
 
 ## Pipeline comparison
 **Compare the two models and their performance. What are the differences in accuracy? In architecture? If there was a difference, why do you think there was one?**
+
+The comparison between the best model found using the **HyperDrive** and the **AutoML** showed that the **AutoML** was able to find the best model in terms of **Accuracy** with a score of **0.91654** using a **VotingEnsemble** algorithm to solve this classification problem.
 
 ## Future work
 **What are some areas of improvement for future experiments? Why might these improvements help the model?**
